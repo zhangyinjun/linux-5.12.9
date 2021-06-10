@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-export CC=gcc
+export CC=gcc-10
 exp_ccount=1
 module=drivers/net/ethernet/netronome/nfp
 
