@@ -20,7 +20,8 @@ jobs:
     - name: Install deps
       run: |
         wget --no-verbose http://archive.ubuntu.com/ubuntu/pool/universe/c/coccinelle/coccinelle_1.0.8.deb-4_amd64.deb
-        sudo apt-get -q=2 install build-essential gcc-10 bc flex bison sparse python libpython2.7 libelf-dev coccinelle_1.0.8.deb-4_amd64.deb
+        sudo apt-get -q=2 install build-essential gcc-10 bc flex bison sparse python libpython2.7 libelf-dev
+        sudo dpkg -i coccinelle_1.0.8.deb-4_amd64.deb
 
     - name: Check out repository
       uses: actions/checkout@v2
