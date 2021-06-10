@@ -35,4 +35,4 @@ jobs:
       run: |
         cp -p .github/deps/commits_check.sh ./
         cp -p .github/deps/xmastree.py ./
-        ./commits_check ${{ steps.get-pr-info.outputs.commits }}
+        ./commits_check.sh ${{ steps.get-pr-info.outputs.commits }}
