@@ -27,17 +27,18 @@ for commit in $(git log --oneline --no-color -$1 --reverse | cut -d ' ' -f 1); d
     echo "----------- Checkpatch ---------------"
     ./scripts/checkpatch.pl --strict -g $commit --ignore FILE_PATH_CHANGES
 
-    echo
-    echo "----------- Cocci check --------------"
-    rm -f .cocci.log
-    [ ! -e ./cocci-debug.log ] || rm ./cocci-debug.log
-    make -j"$(nproc)" CC="$CC" M="$module" coccicheck --quiet MODE=report DEBUG_FILE=cocci-debug.log > .cocci.log
-    ccount=$(cat .cocci.log | grep "on line" | wc -l)
-    if [ $ccount -gt $exp_ccount ]; then
-        echo "new coccinelle found!"
-        exit 1
-    fi
-    echo "Done"
+#    skip cocci check, since no coccinelle pkg in current ubuntu-latest(20.04)
+#    echo
+#    echo "----------- Cocci check --------------"
+#    rm -f .cocci.log
+#    [ ! -e ./cocci-debug.log ] || rm ./cocci-debug.log
+#    make -j"$(nproc)" CC="$CC" M="$module" coccicheck --quiet MODE=report DEBUG_FILE=cocci-debug.log > .cocci.log
+#    ccount=$(cat .cocci.log | grep "on line" | wc -l)
+#    if [ $ccount -gt $exp_ccount ]; then
+#        echo "new coccinelle found!"
+#        exit 1
+#    fi
+#    echo "Done"
 
     # This gets all .c/.h files touched by the commit
     files=$(git show --name-only --oneline --no-merges $commit | grep -E '(*\.h|*\.c)')
