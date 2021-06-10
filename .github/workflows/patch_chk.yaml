@@ -1,0 +1,38 @@
+name: check upstream patches
+
+on: [pull_request]
+
+jobs:
+  patch_chk_job:
+    runs-on: ubuntu-latest
+    name: Patches Check
+    steps:
+    - name: Get PR info
+      id: 'get-pr-info'
+      uses: Brymastr/pr-info-action@v1
+
+    - name: Set env var
+      run: |
+        COMMIT_CNT=$((${{ steps.get-pr-info.outputs.commits }}+1))
+        echo "COMMIT_CNT=${COMMIT_CNT}" >> $GITHUB_ENV
+
+    - name: Install deps
+      run: sudo apt-get -q=2 install build-essential gcc-10 bc flex bison sparse coccinelle python libpython2.7
+
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: ${{ env.COMMIT_CNT }}
+
+    - name: Configure & Build Kernel
+      run: |
+        cp -p .github/deps/local_defconfig ./arch/x86/configs/
+        make -s local_defconfig
+        make -s -j"$(nproc)"
+
+    - name: Run check scripts
+      run: |
+        cp -p .github/deps/commits_check.sh ./
+        cp -p .github/deps/xmastree.py ./
+        ./commits_check ${{ steps.get-pr-info.outputs.commits }}
