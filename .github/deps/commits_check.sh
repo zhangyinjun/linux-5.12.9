@@ -36,23 +36,22 @@ for commit in $(git log --oneline --no-color -$1 --reverse | cut -d ' ' -f 1); d
     ./xmastree.py "$PATCH_FILE"
     rm "$PATCH_FILE"
 
-#    skip these two checks for now, since no appropriate pkg in current env.
-#    echo
-#    echo "----------- Sparse check -------------"
-#    make -j"$(nproc)" CC="$CC" M="$module" C=2 CF=-D__CHECK_ENDIAN__ > /dev/null
-#    echo "Done"
-#
-#    echo
-#    echo "----------- Cocci check --------------"
-#    rm -f .cocci.log
-#    [ ! -e ./cocci-debug.log ] || rm ./cocci-debug.log
-#    make -j"$(nproc)" CC="$CC" M="$module" coccicheck --quiet MODE=report DEBUG_FILE=cocci-debug.log > .cocci.log
-#    ccount=$(cat .cocci.log | grep "on line" | wc -l)
-#    if [ $ccount -gt $exp_ccount ]; then
-#        echo "new coccinelle found!"
-#        exit 1
-#    fi
-#    echo "Done"
+    echo
+    echo "----------- Sparse check -------------"
+    make -j"$(nproc)" CC="$CC" M="$module" C=2 CF=-D__CHECK_ENDIAN__ > /dev/null
+    echo "Done"
+
+    echo
+    echo "----------- Cocci check --------------"
+    rm -f .cocci.log
+    [ ! -e ./cocci-debug.log ] || rm ./cocci-debug.log
+    make -j"$(nproc)" CC="$CC" M="$module" coccicheck --quiet MODE=report DEBUG_FILE=cocci-debug.log > .cocci.log
+    ccount=$(cat .cocci.log | grep "on line" | wc -l)
+    if [ $ccount -gt $exp_ccount ]; then
+        echo "new coccinelle found!"
+        exit 1
+    fi
+    echo "Done"
 
     echo "========================================================"
     echo
