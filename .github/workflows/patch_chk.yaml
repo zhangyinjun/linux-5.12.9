@@ -17,7 +17,7 @@ jobs:
         echo "COMMIT_CNT=${COMMIT_CNT}" >> $GITHUB_ENV
 
     - name: Install deps
-      run: sudo apt-get -q=2 install build-essential gcc-10 bc flex bison sparse coccinelle python libpython2.7 libelf-dev
+      run: sudo apt-get -q=2 install build-essential gcc-10 bc flex bison coccinelle python libpython2.7 libelf-dev
 
     - name: Check out repository
       uses: actions/checkout@v2

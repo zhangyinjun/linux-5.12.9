@@ -19,10 +19,11 @@ for commit in $(git log --oneline --no-color -$1 --reverse | cut -d ' ' -f 1); d
     make -j"$(nproc)" CC="$CC" M="$module" clean
     make -j"$(nproc)" EXTRA_CFLAGS+="-Werror -Wmaybe-uninitialized" CC="$CC" M="$module" > /dev/null
 
-    echo
-    echo "----------- Sparse check -------------"
-    make -j"$(nproc)" CC="$CC" M="$module" C=2 CF=-D__CHECK_ENDIAN__ > /dev/null
-    echo "Done"
+#    skip sparse check for now, since sparse version is too old in ubuntu-18.04
+#    echo
+#    echo "----------- Sparse check -------------"
+#    make -j"$(nproc)" CC="$CC" M="$module" C=2 CF=-D__CHECK_ENDIAN__ > /dev/null
+#    echo "Done"
 
     echo "----------- Checkpatch ---------------"
     ./scripts/checkpatch.pl --strict -g $commit --ignore FILE_PATH_CHANGES
