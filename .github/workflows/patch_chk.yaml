@@ -16,8 +16,9 @@ jobs:
         COMMIT_CNT=$((${{ steps.get-pr-info.outputs.commits }}+1))
         echo "COMMIT_CNT=${COMMIT_CNT}" >> $GITHUB_ENV
 
+    # need download and install sparse coccinelle manually
     - name: Install deps
-      run: sudo apt-get -q=2 install build-essential gcc-10 bc flex bison sparse coccinelle python libpython2.7
+      run: sudo apt-get -q=2 install build-essential gcc-10 bc flex bison python libpython2.7 libelf-dev
 
     - name: Check out repository
       uses: actions/checkout@v2
