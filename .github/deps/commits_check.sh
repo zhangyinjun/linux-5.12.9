@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-export CC=gcc
+export CC=gcc-10
 exp_ccount=1
 module=drivers/net/ethernet/netronome/nfp
 
@@ -15,6 +15,13 @@ for commit in $(git log --oneline --no-color -$1 --reverse | cut -d ' ' -f 1); d
     echo "============== Checking $commit ========================"
 
     git checkout $commit
+
+    commit_message=$(git log --oneline -1 | cut -d ' ' -f 2)
+    if [ "${commit_message}" == "github-patches-check:" ]; then
+        echo " Self-check detected, skipping...."
+        continue
+    fi
+
     echo "----------- Compile check ------------"
     make -j"$(nproc)" CC="$CC" M="$module" clean
     make -j"$(nproc)" EXTRA_CFLAGS+="-Werror -Wmaybe-uninitialized" CC="$CC" M="$module" > /dev/null
